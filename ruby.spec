@@ -2,28 +2,22 @@
 #
 # sudo yum -y install rpmdevtools && rpmdev-setuptree
 #
-#
 # sudo yum -y install readline libyaml libyaml-devel readline-devel ncurses ncurses-devel gdbm gdbm-devel glibc-devel tcl-devel gcc unzip openssl-devel db4-devel byacc make libffi-devel
 #
 # wget https://raw.github.com/nmilford/rpm-ruby/master/ruby.spec -O ~/rpmbuild/SPECS/ruby.spec
-# wget http://cache.ruby-lang.org/pub/ruby/2.1/ruby-%{rubyver}.tar.gz -O ~/rpmbuild/SOURCES/ruby-2.1.1.tar.gz
+# wget http://cache.ruby-lang.org/pub/ruby/ruby-%{_rubyver}-%{_rubyminorver}.tar.gz -O ~/rpmbuild/SOURCES/ruby-%{_rubyver}-%{_rubyminorver}.tar.gz
 #
 # QA_RPATHS=$[ 0x0001|0x0010 ] rpmbuild -bb ~/rpmbuild/SPECS/ruby.spec
 
-%define rubyver         2.1.1
-#%define rubyminorver    p353
-
 Name:           ruby
-#Version:        %{rubyver}_%{rubyminorver}
-Version:        %{rubyver}
+Version:        %{_rubyver}
 Release:        1%{?dist}
 License:        Ruby License/GPL - see COPYING
 URL:            http://www.ruby-lang.org/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  readline libyaml libyaml-devel readline-devel ncurses ncurses-devel gdbm gdbm-devel glibc-devel tcl-devel gcc unzip openssl-devel db4-devel byacc make libffi-devel
 Requires:       libyaml openssl
-#Source0:        ftp://ftp.ruby-lang.org/pub/ruby/ruby-%{rubyver}-%{rubyminorver}.tar.gz
-Source0:        http://cache.ruby-lang.org/pub/ruby/2.1/ruby-%{rubyver}.tar.gz
+Source0:        http://cache.ruby-lang.org/pub/ruby/ruby-%{_rubyver}-%{_rubyminorver}.tar.gz
 Summary:        An interpreter of object-oriented scripting language
 Group:          Development/Languages
 Provides: ruby(abi) = 2.1
@@ -46,8 +40,7 @@ files and to do system management tasks (as in Perl).  It is simple,
 straight-forward, and extensible.
 
 %prep
-#%setup -n ruby-%{rubyver}-%{rubyminorver}
-%setup -n ruby-%{rubyver}
+%setup -n ruby-%{_rubyver}-%{_rubyminorver}
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS -Wall -fno-strict-aliasing"
@@ -78,6 +71,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}
 
 %changelog
+* Mon Mar 2 2015 Leandro Isotton <leandro@isotton.co> - %{_rubyver}-%{_rubyminorver}
+- Make ruby version and minor version parameterized.
 * Fri Apr 25 2014 Spike Grobstein <sgrobstein@shutterstock.com> - 2.1.1
 - Bumps 2.1.1
 * Wed Dec 25 2013 Nathan Milford <nathan@milford.io> - 2.1.0
